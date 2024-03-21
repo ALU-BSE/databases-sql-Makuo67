@@ -1,0 +1,12 @@
+// Use MongoDB's aggregation framework to count the number of products listed by each user
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$userId", // Group by the userId field
+      totalProducts: { $sum: 1 }, // Count the number of products for each userId
+    },
+  },
+  {
+    $sort: { totalProducts: -1 }, // Optional: Sort the results by totalProducts in descending order
+  },
+]);

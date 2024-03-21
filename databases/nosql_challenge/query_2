@@ -1,0 +1,2 @@
+// Find all products listed by a specific user.
+db.products.find({ userId: ObjectId("65fc4f5a2f9974ff6380c3b3") });

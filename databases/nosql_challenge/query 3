@@ -1,0 +1,32 @@
+// Find the total amount spent by a specific user
+db.transactions.aggregate([
+  {
+    $match: {
+      buyerId: ObjectId("65fc4f5a2f9974ff6380c3b3"), // specificUserId
+    },
+  },
+  {
+    $lookup: {
+      from: "products",
+      localField: "productId",
+      foreignField: "_id",
+      as: "productDetails",
+    },
+  },
+  {
+    $unwind: "$productDetails",
+  },
+  {
+    $project: {
+      _id: 0,
+      buyerId: 1,
+      totalCost: { $multiply: ["$quantity", "$productDetails.price"] },
+    },
+  },
+  {
+    $group: {
+      _id: "$buyerId",
+      totalAmountSpent: { $sum: "$totalCost" },
+    },
+  },
+]);
